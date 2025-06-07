@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import {
 	Select,
@@ -20,6 +20,7 @@ export default function BooksPage() {
 	const [search, setSearch] = useState('');
 	const [sort, setSort] = useState('newest');
 	const [category, setCategory] = useState('');
+	const [debouncedSearch, setDebouncedSearch] = useState('');
 	const limit = 10;
 	const {
 		data: books,
@@ -28,11 +29,24 @@ export default function BooksPage() {
 	} = useAllBooks({
 		page,
 		limit,
-		search,
+		search: debouncedSearch,
 		sort,
 		category,
 	});
 	console.log('🚀 ~ BooksPage ~ booksList:', books);
+	// Debounce search input
+	useEffect(() => {
+		const handler = setTimeout(() => {
+			setDebouncedSearch(search);
+			setPage(1);
+		}, 1000); //1000ms debounce
+
+		return () => clearTimeout(handler);
+	}, [search]);
+
+	useEffect(() => {
+		refetch();
+	}, [page, debouncedSearch, sort, category, refetch]);
 	return (
 		<section className='container py-8'>
 			<div className='flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6'>
@@ -63,20 +77,26 @@ export default function BooksPage() {
 					<Select
 						value={category}
 						onValueChange={val => {
-							setCategory(val);
+							const normalized = val === 'All' ? '' : val; // send '' ⇒ no filter
+							setCategory(normalized);
 							setPage(1);
 						}}
 					>
-						<SelectTrigger className='w-[160px]'>
+						<SelectTrigger className='w-[170px]'>
 							<SelectValue placeholder='Filter by category' />
 						</SelectTrigger>
+
 						<SelectContent>
 							<SelectItem value='All'>All</SelectItem>
-							{categoryOptions.map(cat => (
-								<SelectItem key={cat} value={cat}>
-									{cat}
-								</SelectItem>
-							))}
+
+							{categoryOptions.map(cat => {
+								const label = cat.charAt(0) + cat.slice(1).toLowerCase(); // "FICTION" → "Fiction"
+								return (
+									<SelectItem key={cat} value={cat}>
+										{label}
+									</SelectItem>
+								);
+							})}
 						</SelectContent>
 					</Select>
 				</div>

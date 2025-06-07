@@ -24,3 +24,17 @@ export const useAllBooks = (queryData: any) => {
 		enabled: !!page && !!limit,
 	});
 };
+
+// export const useSingleBook = (bookId: any) => {
+// 	return useQuery({
+// 		queryKey: ['single-book', bookId],
+// 		queryFn: async () => {
+// 			const result = await customAxios({
+// 				url: `/book/${bookId}`,
+// 				method: HttpMethod.GET,
+// 			});
+// 			return result;
+// 		},
+// 		enabled: !!bookId,
+// 	});
+// };
