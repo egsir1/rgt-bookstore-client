@@ -18,34 +18,34 @@ import { getInitials } from '@/lib/utils';
 const navItems = [
 	{
 		title: 'Books',
-		href: '/instructor/courses',
+		href: '/mg-dashboard/books',
 		icon: IconBook,
 	},
 	{
 		title: 'Users',
-		href: '/instructor/students',
+		href: '/mg-dashboard/users',
 		icon: IconUsers,
 	},
 	{
 		title: 'Performance',
-		href: '/instructor/performance',
+		href: '/mg-dashboard/statistics',
 		icon: IconTrendingUp,
 	},
 
 	{
 		title: 'Profile',
-		href: '/instructor/profile',
+		href: '/mg-dashboard/profile',
 		icon: IconUser,
 	},
 	{
 		title: 'Notifications',
-		href: '/instructor/notifications',
+		href: '/mg-dashboard/notifications',
 		icon: IconBell,
 	},
 
 	{
 		title: 'Reviews',
-		href: '/instructor/reviews',
+		href: '/mg-dashboard/reviews',
 		icon: IconStar,
 	},
 ];
