@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { Spinner } from '../spinner';
+import { useLogin, useSignup } from '@/hooks/use-auth';
 
 const loginSchema = z.object({
 	email: z.string().email(),
@@ -55,46 +56,34 @@ export default function AuthForm() {
 		),
 	});
 
-	// const signup = useSignup();
-	// const login = useLogin();
-	// const forgotPassword = useForgotPassword();
+	const signup = useSignup();
+	const login = useLogin();
 
-	// const onSubmit = async (data: any) => {
-	// 	if (mode === 'signup') {
-	// 		signup.mutate(data, {
-	// 			onSuccess: () => {
-	// 				toast.success('Signup successful. Check your email to verify');
-	// 				router.push('/auth/verify');
-	// 			},
-	// 			onError: (err: any) => {
-	// 				const parsed = JSON.parse(err.message);
-	// 				toast.error(parsed.errorMessage || 'Signup failed');
-	// 			},
-	// 		});
-	// 	} else if (mode === 'login') {
-	// 		login.mutate(data, {
-	// 			onSuccess: () => {
-	// 				toast.success('Login successful');
-	// 				router.push('/');
-	// 			},
-	// 			onError: (err: any) => {
-	// 				const parsed = JSON.parse(err.message);
-	// 				toast.error(parsed.errorMessage || 'Login failed');
-	// 			},
-	// 		});
-	// 	} else if (mode === 'forgot') {
-	// 		forgotPassword.mutate(data.email, {
-	// 			onSuccess: () => {
-	// 				toast.success('Recovery email sent. Check your inbox.');
-	// 				setShowMessage(true);
-	// 			},
-	// 			onError: (err: any) => {
-	// 				const parsed = JSON.parse(err.message);
-	// 				toast.error(parsed.errorMessage || 'Failed to send reset email');
-	// 			},
-	// 		});
-	// 	}
-	// };
+	const onSubmit = async (data: any) => {
+		if (mode === 'signup') {
+			signup.mutate(data, {
+				onSuccess: () => {
+					toast.success('Signup successful. Check your email to verify');
+					router.push('/auth/verify');
+				},
+				onError: (err: any) => {
+					const parsed = JSON.parse(err.message);
+					toast.error(parsed.errorMessage || 'Signup failed');
+				},
+			});
+		} else if (mode === 'login') {
+			login.mutate(data, {
+				onSuccess: () => {
+					toast.success('Login successful');
+					router.push('/');
+				},
+				onError: (err: any) => {
+					const parsed = JSON.parse(err.message);
+					toast.error(parsed.errorMessage || 'Login failed');
+				},
+			});
+		}
+	};
 
 	return (
 		<motion.div
