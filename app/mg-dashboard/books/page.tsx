@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import {
 	Select,
@@ -11,53 +11,28 @@ import {
 } from '@/components/ui/select';
 import { BookCard } from '@/components/admin/books-card';
 import { Pagination } from '@/components/admin/pagination';
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-
-const sortOptions = [
-	{ value: 'newest', label: 'Newest' },
-	{ value: 'top_rated', label: 'Top Rated' },
-	{ value: 'most_sold', label: 'Best Sellers' },
-];
-
-const categoryOptions = [
-	'FICTION',
-	'NONFICTION',
-	'SCIENCE',
-	'TECHNOLOGY',
-	'HISTORY',
-	'BIOGRAPHY',
-	'BUSINESS',
-	'CHILDREN',
-	'FANTASY',
-];
+import { categoryOptions, sortOptions } from '@/lib/config';
+import { useAllBooks } from '@/hooks/books';
 
 export default function BooksPage() {
-	const [books, setBooks] = useState([]);
 	const [totalPages, setTotalPages] = useState(1);
 	const [page, setPage] = useState(1);
 	const [search, setSearch] = useState('');
 	const [sort, setSort] = useState('newest');
 	const [category, setCategory] = useState('');
-
-	const fetchBooks = async () => {
-		const params = new URLSearchParams({
-			page: String(page),
-			limit: '10',
-			...(search && { search }),
-			...(sort && { sort }),
-			...(category && { category }),
-		});
-
-		const res = await fetch(`${BASE_URL}/books?${params.toString()}`);
-		const json = await res.json();
-		setBooks(json.data);
-		setTotalPages(json.totalPages);
-	};
-
-	useEffect(() => {
-		fetchBooks();
-	}, [page, search, sort, category]);
-
+	const limit = 10;
+	const {
+		data: books,
+		isLoading,
+		refetch,
+	} = useAllBooks({
+		page,
+		limit,
+		search,
+		sort,
+		category,
+	});
+	console.log('🚀 ~ BooksPage ~ booksList:', books);
 	return (
 		<section className='container py-8'>
 			<div className='flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6'>
@@ -109,7 +84,7 @@ export default function BooksPage() {
 
 			{/* Book Grid */}
 			<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
-				{books?.map((book: any) => (
+				{books?.data?.map((book: any) => (
 					<BookCard key={book.id} book={book} />
 				))}
 			</div>

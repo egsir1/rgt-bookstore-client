@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export function BookCard({ book }: { book: any }) {
+	const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 	return (
 		<Card>
 			<CardHeader>
@@ -10,7 +11,7 @@ export function BookCard({ book }: { book: any }) {
 			</CardHeader>
 			<CardContent className='flex flex-col gap-2'>
 				<Image
-					src={book.thumbnailUrl || '/default-cover.jpg'}
+					src={`${BASE_URL}${book.thumbnailUrl}` || '/default-cover.jpg'}
 					alt={book.title}
 					width={400}
 					height={300}
