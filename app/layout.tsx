@@ -3,6 +3,9 @@ import './globals.css';
 
 import type { Metadata } from 'next';
 import { Footer } from '@/components/footer';
+import Providers from '@/components/providers';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { Toaster } from 'sonner';
 
 export const metadata: Metadata = {
 	title: 'BookVerse',
@@ -17,13 +20,15 @@ export default function RootLayout({
 	return (
 		<html lang='en'>
 			<body className='bg-background text-foreground font-sans'>
-				<Header />
-
-				<main className='container mx-auto px-4 py-6 min-h-[calc(100vh-8rem)]'>
-					{children}
-				</main>
-
-				<Footer />
+				<Providers>
+					<ReactQueryDevtools initialIsOpen={false} />
+					<Toaster position='top-center' />
+					<Header />
+					<main className='container mx-auto px-4 py-6 min-h-[calc(100vh-8rem)]'>
+						{children}
+					</main>
+					<Footer />
+				</Providers>
 			</body>
 		</html>
 	);

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 
 const navItems = [
@@ -12,6 +12,7 @@ const navItems = [
 
 export function Header() {
 	const pathname = usePathname();
+	const router = useRouter();
 
 	return (
 		<header className='sticky top-0 z-50 w-full border-b bg-white'>
@@ -40,7 +41,12 @@ export function Header() {
 
 				{/* Actions */}
 				<div className='flex items-center gap-2'>
-					<Button variant='outline' size='sm'>
+					<Button
+						onClick={() => router.push('/auth')}
+						variant='outline'
+						size='sm'
+						className='cursor-pointer'
+					>
 						Sign In
 					</Button>
 				</div>

@@ -99,15 +99,7 @@ export default function AuthForm() {
 					? 'Create your account'
 					: 'Recover your password'}
 			</h2>
-			{mode !== 'forgot' && (
-				<>
-					<div className='flex items-center my-4'>
-						<hr className='flex-grow border-gray-100' />
-						<span className='mx-2 text-gray-300 text-sm'>or</span>
-						<hr className='flex-grow border-gray-100' />
-					</div>
-				</>
-			)}
+
 			<form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
 				{mode === 'signup' && (
 					<div>
@@ -161,25 +153,17 @@ export default function AuthForm() {
 				<Button
 					type='submit'
 					className='w-full'
-					disabled={
-						signup.status === 'pending' ||
-						login.status === 'pending' ||
-						forgotPassword.status === 'pending'
-					}
+					disabled={signup.status === 'pending' || login.status === 'pending'}
 				>
-					{((mode === 'signup' && signup.status === 'pending') ||
-						(mode === 'login' && login.status === 'pending') ||
-						(mode === 'forgot' && forgotPassword.status === 'pending')) && (
-						<span className='flex items-center justify-center gap-2'>
-							<Spinner />
-							Processing...
-						</span>
-					)}
+					{(mode === 'signup' && signup.status === 'pending') ||
+						(mode === 'login' && login.status === 'pending' && (
+							<span className='flex items-center justify-center gap-2'>
+								<Spinner />
+								Processing...
+							</span>
+						))}
 					{(mode === 'signup' && signup.status !== 'pending' && 'Sign Up') ||
-						(mode === 'login' && login.status !== 'pending' && 'Login') ||
-						(mode === 'forgot' &&
-							forgotPassword.status !== 'pending' &&
-							'Send Recovery Email')}
+						(mode === 'login' && login.status !== 'pending' && 'Login')}
 				</Button>
 			</form>
 			{mode === 'forgot' && showMessage && (
@@ -197,7 +181,6 @@ export default function AuthForm() {
 						>
 							Sign Up
 						</button>{' '}
-						|{' '}
 					</>
 				) : mode === 'signup' ? (
 					<>
