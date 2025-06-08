@@ -8,7 +8,7 @@ npm run build
 
 echo "▶ (Re)starting PM2 process rgt-web"
 pm2 delete rgt-web 2>/dev/null || true
-pm2 start "npm run start -- -p 6000" \
+pm2 start "npm run start -- -p 8000" \
      --name rgt-web          \
      --env production        \
      --time
