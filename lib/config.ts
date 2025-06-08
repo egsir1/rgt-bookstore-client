@@ -15,3 +15,25 @@ export const categoryOptions = [
 	'CHILDREN',
 	'FANTASY',
 ];
+
+/** Difficulty / target-audience levels */
+export const levelOptions = [
+	'BEGINNER',
+	'INTERMEDIATE',
+	'ADVANCED',
+	'ALL_LEVELS', // mixed audiences
+] as const;
+
+/** Primary course languages */
+export const languageOptions = [
+	'ENGLISH',
+	'KOREAN',
+	'UZBEK',
+	'JAPANESE',
+	'CHINESE',
+	'SPANISH',
+	'FRENCH',
+	'GERMAN',
+	'PORTUGUESE',
+	'RUSSIAN',
+] as const;

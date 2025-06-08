@@ -13,6 +13,8 @@ import { BookCard } from '@/components/admin/books-card';
 import { Pagination } from '@/components/admin/pagination';
 import { categoryOptions, sortOptions } from '@/lib/config';
 import { useAllBooks } from '@/hooks/books';
+import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
 
 export default function BooksPage() {
 	const [totalPages, setTotalPages] = useState(1);
@@ -22,6 +24,8 @@ export default function BooksPage() {
 	const [category, setCategory] = useState('');
 	const [debouncedSearch, setDebouncedSearch] = useState('');
 	const limit = 10;
+
+	const router = useRouter();
 	const {
 		data: books,
 		isLoading,
@@ -49,6 +53,14 @@ export default function BooksPage() {
 	}, [page, debouncedSearch, sort, category, refetch]);
 	return (
 		<section className='container py-8'>
+			<div className='flex justify-end my-2'>
+				<Button
+					className='cursor-pointer'
+					onClick={() => router.push('/mg-dashboard/new-book')}
+				>
+					+ New Book
+				</Button>
+			</div>
 			<div className='flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6'>
 				<Input
 					placeholder='Search books...'
@@ -101,14 +113,12 @@ export default function BooksPage() {
 					</Select>
 				</div>
 			</div>
-
 			{/* Book Grid */}
 			<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
 				{books?.data?.map((book: any) => (
 					<BookCard key={book.id} book={book} />
 				))}
 			</div>
-
 			{/* Pagination */}
 			<div className='mt-10 flex justify-center'>
 				<Pagination
