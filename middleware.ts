@@ -15,10 +15,10 @@ export function middleware(req: NextRequest) {
 	const token = req.cookies.get('accessToken')?.value;
 
 	if (!token) {
-		// Redirect to auth page with `next` param
+		// Always redirect to /auth without next param
 		const loginUrl = req.nextUrl.clone();
 		loginUrl.pathname = '/auth';
-		loginUrl.searchParams.set('next', pathname); // Save original target
+		loginUrl.searchParams.delete('next'); // make sure it's clean
 		return NextResponse.redirect(loginUrl);
 	}
 
@@ -26,5 +26,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-	matcher: ['/((?!_next/.*|favicon.ico).*)'], // Avoid matching static and public files
+	matcher: ['/((?!_next/.*|favicon.ico).*)'], // Exclude static and public files
 };
