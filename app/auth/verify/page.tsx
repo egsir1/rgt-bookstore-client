@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { useVerify } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
-import { Spinner } from '@/components/Spinner';
+import { Spinner } from '@/components/spinner';
 
 export default function VerifyPage() {
 	const [otpValues, setOtpValues] = useState(Array(6).fill(''));
