@@ -1,7 +1,14 @@
 import { customAxios, HttpMethod } from '@/lib/custom-axios';
+import { CreateBook } from '@/types/book';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-export const useAllBooks = (queryData: any) => {
+export const useAllBooks = (queryData: {
+	limit: number;
+	page: number;
+	search?: string;
+	sort?: string;
+	category?: string;
+}) => {
 	const { limit, page, search, sort, category } = queryData;
 
 	return useQuery({
@@ -27,10 +34,24 @@ export const useAllBooks = (queryData: any) => {
 
 export const useCreateBook = () => {
 	return useMutation({
-		mutationFn: async (data: any) => {
+		mutationFn: async (data: CreateBook) => {
 			const result = await customAxios({
 				url: '/book/create',
 				method: HttpMethod.POST,
+				data,
+			});
+			console.log('🚀 ~ mutationFn: ~ result:', result);
+			return result;
+		},
+	});
+};
+
+export const useUpdateBook = () => {
+	return useMutation({
+		mutationFn: async (data: any) => {
+			const result = await customAxios({
+				url: '/book/update',
+				method: HttpMethod.PUT,
 				data,
 			});
 			console.log('🚀 ~ mutationFn: ~ result:', result);

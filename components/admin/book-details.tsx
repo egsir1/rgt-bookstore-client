@@ -1,20 +1,19 @@
 'use client';
 
-import { useState } from 'react';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Book } from '@/types/book';
 import './text-editor.css';
+import { useRouter } from 'next/navigation';
 
 interface Props {
 	book: Book;
 }
 
 export default function BookDetail({ book }: Props) {
-	const [qty, setQty] = useState(1);
 	const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-
+	const router = useRouter();
 	return (
 		<section className='container py-10'>
 			{/* ==== GRID LAYOUT ==== */}
@@ -72,35 +71,13 @@ export default function BookDetail({ book }: Props) {
 				</div>
 
 				{/* ── Right: Buy Box ───────────────────────── */}
-				<div className='md:col-start-3 md:row-start-1 md:sticky md:top-24'>
-					<div className='border rounded p-4 shadow flex flex-col gap-4'>
-						<h2 className='text-2xl font-bold'>${book.price.toFixed(2)}</h2>
-
-						<div className='space-y-1'>
-							<label htmlFor='qty' className='text-sm font-medium'>
-								Quantity
-							</label>
-							<select
-								id='qty'
-								value={qty}
-								onChange={e => setQty(Number(e.target.value))}
-								className='border rounded p-2 w-full'
-							>
-								{[...Array(Math.min(book.amount ?? 10, 10)).keys()].map(n => (
-									<option key={n + 1}>{n + 1}</option>
-								))}
-							</select>
-						</div>
-
-						<Button className='w-full'>Add to Cart</Button>
-						<Button variant='outline' className='w-full'>
-							Buy Now
-						</Button>
-
-						<p className='text-xs text-muted-foreground text-center'>
-							Ships &amp; sold by BookStore • 30-day return policy
-						</p>
-					</div>
+				<div className='flex gap-5 '>
+					<Button
+						onClick={() => router.push(`/mg-dashboard/update-book/${book.id}`)}
+					>
+						Update
+					</Button>
+					<Button>Delete</Button>
 				</div>
 			</div>
 		</section>
