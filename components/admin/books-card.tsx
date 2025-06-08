@@ -8,11 +8,11 @@ export function BookCard({ book }: { book: any }) {
 	const router = useRouter();
 	return (
 		<Card
-			className='cursor-pointer'
+			className='cursor-pointer  h-[450px]'
 			onClick={() => router.push(`/mg-dashboard/books/${book.id}`)}
 		>
 			<CardHeader>
-				<CardTitle className='text-lg'>{book.title}</CardTitle>
+				<CardTitle className='text-lg line-clamp-1'>{book.title}</CardTitle>
 				<p className='text-sm text-muted-foreground'>by {book.author}</p>
 			</CardHeader>
 			<CardContent className='flex flex-col gap-2'>
@@ -20,15 +20,19 @@ export function BookCard({ book }: { book: any }) {
 					src={`${BASE_URL}${book.thumbnailUrl}` || 'assets/book-cover.png'}
 					alt={book.title}
 					width={400}
-					height={300}
-					className='rounded-md object-cover w-full h-[200px]'
+					height={200}
+					className='rounded-md object-fit w-full h-[230px]'
 				/>
 				<div
 					className='text-sm text-muted-foreground line-clamp-3'
 					dangerouslySetInnerHTML={{ __html: book.description }}
 				/>
-
-				<div className='text-sm font-medium text-primary'>${book.price}</div>
+				<div className='flex justify-between'>
+					<div className='text-sm font-medium text-primary'>${book.price}</div>
+					<div className='bg-gray-100 px-3 rounded-xl'>
+						{book.category.toLowerCase()}
+					</div>
+				</div>{' '}
 			</CardContent>
 		</Card>
 	);

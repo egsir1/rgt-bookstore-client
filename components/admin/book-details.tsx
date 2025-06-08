@@ -19,6 +19,7 @@ import {
 	AlertDialogCancel,
 	AlertDialogAction,
 } from '@/components/ui/alert-dialog';
+import { useUserStore } from '@/stores/useUserStore';
 
 interface Props {
 	book: Book;
@@ -28,13 +29,13 @@ export default function BookDetail({ book }: Props) {
 	const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 	const router = useRouter();
 	const deleteBook = useDeleteBook();
-
+	const { user } = useUserStore();
 	return (
-		<section className='container py-10'>
+		<section className='container py-10 '>
 			{/* ==== GRID LAYOUT ==== */}
-			<div className='grid grid-cols-1 md:grid-cols-3 gap-10'>
+			<div className='flex gap-10'>
 				{/* ── Left: Cover ───────────────────────────── */}
-				<div className='w-full'>
+				<div className='w-full '>
 					<Image
 						src={`${BASE_URL}${book.thumbnailUrl}` || '/placeholder.png'}
 						alt={book.title}
@@ -86,54 +87,59 @@ export default function BookDetail({ book }: Props) {
 				</div>
 
 				{/* ── Right: Actions ───────────────────────── */}
-				<div className='flex gap-5'>
-					<Button
-						onClick={() => router.push(`/mg-dashboard/update-book/${book.id}`)}
-					>
-						Update
-					</Button>
-					<AlertDialog>
-						{/* the “Delete” button becomes the dialog trigger */}
-						<AlertDialogTrigger asChild>
-							<Button variant='destructive' disabled={deleteBook.isPending}>
-								{deleteBook.isPending ? 'Deleting…' : 'Delete'}
-							</Button>
-						</AlertDialogTrigger>
+				{user && String(user?.role) === 'ADMIN' && (
+					<div className='flex  w-[200px] gap-5'>
+						<Button
+							variant={'outline'}
+							onClick={() =>
+								router.push(`/mg-dashboard/update-book/${book.id}`)
+							}
+						>
+							Update
+						</Button>
+						<AlertDialog>
+							{/* the “Delete” button becomes the dialog trigger */}
+							<AlertDialogTrigger asChild>
+								<Button variant='destructive' disabled={deleteBook.isPending}>
+									{deleteBook.isPending ? 'Deleting…' : 'Delete'}
+								</Button>
+							</AlertDialogTrigger>
 
-						{/* dialog markup */}
-						<AlertDialogContent>
-							<AlertDialogHeader>
-								<AlertDialogTitle>Delete this book?</AlertDialogTitle>
-								<AlertDialogDescription>
-									This action cannot be undone. The book and all related data
-									will be permanently removed from the database.
-								</AlertDialogDescription>
-							</AlertDialogHeader>
+							{/* dialog markup */}
+							<AlertDialogContent>
+								<AlertDialogHeader>
+									<AlertDialogTitle>Delete this book?</AlertDialogTitle>
+									<AlertDialogDescription>
+										This action cannot be undone. The book and all related data
+										will be permanently removed from the database.
+									</AlertDialogDescription>
+								</AlertDialogHeader>
 
-							<AlertDialogFooter>
-								<AlertDialogCancel>Cancel</AlertDialogCancel>
+								<AlertDialogFooter>
+									<AlertDialogCancel>Cancel</AlertDialogCancel>
 
-								{/* Confirm button triggers the mutation */}
-								<AlertDialogAction
-									className='bg-destructive text-destructive-foreground hover:bg-destructive/90 text-white'
-									disabled={deleteBook.isPending}
-									onClick={async () => {
-										try {
-											const data = { bookId: book.id };
-											await deleteBook.mutateAsync(data);
-											toast.success('Book deleted');
-											router.push('/mg-dashboard/books');
-										} catch (e) {
-											toast.error((e as Error).message);
-										}
-									}}
-								>
-									{deleteBook.isPending ? 'Deleting…' : 'Yes, delete'}
-								</AlertDialogAction>
-							</AlertDialogFooter>
-						</AlertDialogContent>
-					</AlertDialog>
-				</div>
+									{/* Confirm button triggers the mutation */}
+									<AlertDialogAction
+										className='bg-destructive text-destructive-foreground hover:bg-destructive/90 text-white'
+										disabled={deleteBook.isPending}
+										onClick={async () => {
+											try {
+												const data = { bookId: book.id };
+												await deleteBook.mutateAsync(data);
+												toast.success('Book deleted');
+												router.push('/mg-dashboard/books');
+											} catch (e) {
+												toast.error((e as Error).message);
+											}
+										}}
+									>
+										{deleteBook.isPending ? 'Deleting…' : 'Yes, delete'}
+									</AlertDialogAction>
+								</AlertDialogFooter>
+							</AlertDialogContent>
+						</AlertDialog>
+					</div>
+				)}
 			</div>
 		</section>
 	);
