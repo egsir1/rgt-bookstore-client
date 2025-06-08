@@ -1,27 +1,30 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const PUBLIC = ['/auth', '/api', '/_next', '/favicon.ico'];
+const PUBLIC_ROUTES = ['/auth', '/api', '/_next', '/favicon.ico'];
 
 export function middleware(req: NextRequest) {
 	const { pathname } = req.nextUrl;
 
-	// Let public assets & the auth page through
-	if (PUBLIC.some(p => pathname.startsWith(p))) return NextResponse.next();
+	// Allow public routes
+	if (PUBLIC_ROUTES.some(publicPath => pathname.startsWith(publicPath))) {
+		return NextResponse.next();
+	}
 
+	// Check for access token
 	const token = req.cookies.get('accessToken')?.value;
 
 	if (!token) {
-		// Not authenticated → redirect before the page renders
-		const login = req.nextUrl.clone();
-		login.pathname = '/auth';
-		login.searchParams.set('next', pathname); // so you can redirect back later
-		return NextResponse.redirect(login);
+		// Redirect to auth page with `next` param
+		const loginUrl = req.nextUrl.clone();
+		loginUrl.pathname = '/auth';
+		loginUrl.searchParams.set('next', pathname); // Save original target
+		return NextResponse.redirect(loginUrl);
 	}
 
-	return NextResponse.next(); // token exists → continue
+	return NextResponse.next(); // Authenticated
 }
 
 export const config = {
-	matcher: ['/((?!_next/.*).*)'], // every route except static assets
+	matcher: ['/((?!_next/.*|favicon.ico).*)'], // Avoid matching static and public files
 };

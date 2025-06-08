@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Spinner } from '../spinner';
 import { useLogin, useSignup } from '@/hooks/use-auth';
 
@@ -58,7 +58,8 @@ export default function AuthForm() {
 
 	const signup = useSignup();
 	const login = useLogin();
-
+	const searchParams = useSearchParams();
+	const nextUrl = searchParams.get('next') || '/';
 	const onSubmit = async (data: any) => {
 		if (mode === 'signup') {
 			signup.mutate(data, {
@@ -79,7 +80,7 @@ export default function AuthForm() {
 			login.mutate(data, {
 				onSuccess: () => {
 					toast.success('Login successful');
-					router.replace('/');
+					router.push(nextUrl);
 				},
 				onError: (err: any) => {
 					const parsed = JSON.parse(err.message);
