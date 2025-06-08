@@ -37,6 +37,8 @@ export const useVerify = () => {
 };
 
 export const useLogin = () => {
+	const setUser = useUserStore(state => state.setUser);
+
 	return useMutation({
 		mutationFn: async (data: { email: string; password: string }) => {
 			const res = await customAxios({
@@ -45,22 +47,29 @@ export const useLogin = () => {
 				data,
 			});
 			console.log('🚀 ~ useLogin ~ res:', res);
+			if (res.data) {
+				setUser(res.data);
+			}
+			return res;
+		},
+	});
+};
+
+export const useLogout = () => {
+	return useMutation({
+		mutationFn: async () => {
+			const res = await customAxios({
+				url: '/user/logout',
+				method: HttpMethod.POST,
+			});
+			console.log('🚀 ~ useLogout ~ res:', res);
 			return res;
 		},
 	});
 };
 
 export const useMe = () => {
-	const [enabled, setEnabled] = useState(false);
-	console.log('🚀 ~ useMe ~ enabled:', enabled);
 	const setUser = useUserStore(state => state.setUser);
-
-	// useEffect(() => {
-	// 	if (Cookies.get('log') === '1') {
-	// 		setEnabled(true);
-	// 	}
-	// }, []);
-
 	const query = useQuery({
 		// enabled,
 		queryKey: ['me'],

@@ -1,19 +1,16 @@
 'use client';
 
 import {
-	IconTrendingUp,
-	IconUser,
-	IconBell,
-	IconUsers,
-	IconStar,
 	IconLayoutSidebarLeftCollapse,
 	IconLayoutSidebarLeftExpand,
 	IconBook,
+	IconUsers,
 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { getInitials } from '@/lib/utils';
+import { useUserStore } from '@/stores/useUserStore';
 
 const navItems = [
 	{
@@ -26,28 +23,6 @@ const navItems = [
 		href: '/mg-dashboard/users',
 		icon: IconUsers,
 	},
-	{
-		title: 'Performance',
-		href: '/mg-dashboard/statistics',
-		icon: IconTrendingUp,
-	},
-
-	{
-		title: 'Profile',
-		href: '/mg-dashboard/profile',
-		icon: IconUser,
-	},
-	{
-		title: 'Notifications',
-		href: '/mg-dashboard/notifications',
-		icon: IconBell,
-	},
-
-	{
-		title: 'Reviews',
-		href: '/mg-dashboard/reviews',
-		icon: IconStar,
-	},
 ];
 
 type Props = {
@@ -57,13 +32,9 @@ type Props = {
 
 export default function AppSidebar({ isOpen, setIsOpen }: Props) {
 	const pathname = usePathname();
-	const user = {
-		name: 'Sam Egamberdiev',
-		email: 'samdev@example.com',
-	};
-
-	const initials = getInitials(user.name || user.email);
-	const displayName = user.name || user.email;
+	const { user } = useUserStore();
+	const initials = getInitials(user?.name || user?.email || '');
+	const displayName = user?.name || user?.email;
 
 	return (
 		<motion.aside

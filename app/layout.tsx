@@ -4,9 +4,9 @@ import type { Metadata } from 'next';
 import Providers from '@/components/providers';
 import AuthProvider from '@/components/auth-provider';
 import { Header } from '@/components/header';
-import { Footer } from '@/components/footer';
 import { Toaster } from 'sonner';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import FooterConditional from '@/components/footer-conditional';
 
 export const metadata: Metadata = {
 	title: 'RGT',
@@ -30,7 +30,7 @@ export default function RootLayout({
 						<main className='container mx-auto px-4 py-6 min-h-[calc(100vh-8rem)]'>
 							{children}
 						</main>
-						<Footer />
+						<FooterConditional />
 					</AuthProvider>
 				</Providers>
 			</body>

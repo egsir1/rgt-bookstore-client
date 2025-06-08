@@ -15,6 +15,7 @@ import { categoryOptions, sortOptions } from '@/lib/config';
 import { useAllBooks } from '@/hooks/books';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
+import { useUserStore } from '@/stores/useUserStore';
 
 export default function BooksPage() {
 	const [totalPages, setTotalPages] = useState(1);
@@ -24,8 +25,8 @@ export default function BooksPage() {
 	const [category, setCategory] = useState('');
 	const [debouncedSearch, setDebouncedSearch] = useState('');
 	const limit = 10;
-
-	const router = useRouter();
+	const { user } = useUserStore();
+	console.log('🚀 ~ BooksPage ~ user:', user);
 	const {
 		data: books,
 		isLoading,

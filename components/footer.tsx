@@ -1,6 +1,6 @@
 export function Footer() {
 	return (
-		<footer className='border-t mt-10 py-6 bg-muted'>
+		<footer className='border-t mt-10 py-6 bg-gray-100'>
 			<div className='container mx-auto px-4 flex flex-col md:flex-row items-center justify-between'>
 				<p className='text-sm text-muted-foreground'>
 					© {new Date().getFullYear()} RGT

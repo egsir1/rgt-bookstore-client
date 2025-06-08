@@ -10,7 +10,7 @@ export default function InstructorLayout({
 }) {
 	const [isOpen, setIsOpen] = useState(true);
 	return (
-		<div className='min-h-screen bg-muted/30 w-full'>
+		<div className='min-h-screen  w-full'>
 			<div className='mx-auto flex w-full max-w-[1440px]'>
 				<div
 					className={`${
