@@ -75,7 +75,7 @@ export default function AuthForm() {
 			login.mutate(data, {
 				onSuccess: () => {
 					toast.success('Login successful');
-					router.push('/');
+					router.replace('/');
 				},
 				onError: (err: any) => {
 					const parsed = JSON.parse(err.message);

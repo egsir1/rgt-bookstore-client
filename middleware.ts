@@ -9,9 +9,7 @@ export function middleware(req: NextRequest) {
 	// Let public assets & the auth page through
 	if (PUBLIC.some(p => pathname.startsWith(p))) return NextResponse.next();
 
-	/* ⬇️ READ the HTTP-only cookie – perfectly allowed on the server */
 	const token = req.cookies.get('accessToken')?.value;
-	console.log('🚀 ~ middleware ~ token:', token);
 
 	if (!token) {
 		// Not authenticated → redirect before the page renders
