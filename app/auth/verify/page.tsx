@@ -32,17 +32,29 @@ export default function VerifyPage() {
 
 	const verifyEmail = useVerify();
 	const handleVerify = async () => {
+		const att = localStorage.getItem('att');
 		const otp = otpValues.join('');
 		if (otp.length !== 6) return toast.error('Please enter a 6-digit code');
 		console.log('Verifying OTP:', otp);
-		verifyEmail.mutate(otp, {
+		const data = { code: otp, token: att };
+		verifyEmail.mutate(data, {
 			onSuccess: () => {
+				localStorage.removeItem('att');
 				toast.success('Email verification successful');
 				router.push('/');
 			},
 			onError: (err: any) => {
-				const parsed = JSON.parse(err.message);
-				toast.error(parsed.errorMessage || 'Verification failed');
+				let errorMessage = 'Verification failed';
+				try {
+					const parsed =
+						typeof err.message === 'string' ? JSON.parse(err.message) : err;
+					errorMessage =
+						parsed?.errorMessage || parsed?.message || errorMessage;
+				} catch {
+					errorMessage =
+						err?.response?.data?.errorMessage || err?.message || errorMessage;
+				}
+				toast.error(errorMessage);
 			},
 		});
 	};

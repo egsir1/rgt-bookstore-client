@@ -62,7 +62,10 @@ export default function AuthForm() {
 	const onSubmit = async (data: any) => {
 		if (mode === 'signup') {
 			signup.mutate(data, {
-				onSuccess: () => {
+				onSuccess: response => {
+					console.log('🚀 ~ onSubmit ~ response:', response);
+
+					localStorage.setItem('att', response?.verificationToken);
 					toast.success('Signup successful. Check your email to verify');
 					router.push('/auth/verify');
 				},
@@ -71,6 +74,7 @@ export default function AuthForm() {
 					toast.error(parsed.errorMessage || 'Signup failed');
 				},
 			});
+			console.log('🚀 ~ onSubmit ~ data:', data);
 		} else if (mode === 'login') {
 			login.mutate(data, {
 				onSuccess: () => {

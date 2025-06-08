@@ -23,11 +23,11 @@ export const useSignup = () => {
 
 export const useVerify = () => {
 	return useMutation({
-		mutationFn: async (otpcode: string) => {
+		mutationFn: async (data: { code: string; token: string | null }) => {
 			const res = await customAxios({
 				url: '/user/verify-email',
 				method: HttpMethod.PATCH,
-				data: { activationCode: otpcode },
+				data,
 			});
 			console.log('🚀 ~ mutationFn: ~ res:', res);
 
