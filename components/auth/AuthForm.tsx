@@ -55,7 +55,7 @@ export default function AuthForm() {
 				: forgotSchema
 		),
 	});
-	const searchParams = useSearchParams();
+
 	const signup = useSignup();
 	const login = useLogin();
 	const onSubmit = async (data: any) => {
@@ -87,10 +87,7 @@ export default function AuthForm() {
 			login.mutate(data, {
 				onSuccess: () => {
 					toast.success('Login successful');
-					const next = searchParams.get('next') || '/';
-
-					router.replace(next);
-					router.refresh();
+					router.replace('/');
 				},
 				onError: (err: any) => {
 					let errorMessage = 'Verification failed';

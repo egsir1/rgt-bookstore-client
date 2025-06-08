@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+
 import { Input } from '@/components/ui/input';
 import {
 	Select,
@@ -9,24 +11,30 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+
 import { BookCard } from '@/components/admin/books-card';
+import BookCardSkeleton from '@/components/admin/book-card-skeleton';
 import { Pagination } from '@/components/admin/pagination';
+
 import { categoryOptions, sortOptions } from '@/lib/config';
 import { useAllBooks } from '@/hooks/books';
-import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/stores/useUserStore';
 
 export default function BooksPage() {
-	const [totalPages, setTotalPages] = useState(1);
+	/* pagination / filters */
 	const [page, setPage] = useState(1);
+	const [totalPages, setTotalPages] = useState(1);
 	const [search, setSearch] = useState('');
+	const [debouncedSearch, setDebouncedSearch] = useState('');
 	const [sort, setSort] = useState('newest');
 	const [category, setCategory] = useState('');
-	const [debouncedSearch, setDebouncedSearch] = useState('');
 	const limit = 10;
+
+	const router = useRouter();
 	const { user } = useUserStore();
-	console.log('🚀 ~ BooksPage ~ user:', user);
+
+	/* query */
 	const {
 		data: books,
 		isLoading,
@@ -38,35 +46,50 @@ export default function BooksPage() {
 		sort,
 		category,
 	});
-	console.log('🚀 ~ BooksPage ~ booksList:', books);
-	// Debounce search input
+
+	/* debounce search */
 	useEffect(() => {
-		const handler = setTimeout(() => {
+		const id = setTimeout(() => {
 			setDebouncedSearch(search);
 			setPage(1);
-		}, 1000); //1000ms debounce
-
-		return () => clearTimeout(handler);
+		}, 600);
+		return () => clearTimeout(id);
 	}, [search]);
 
+	/* refetch on param change */
 	useEffect(() => {
 		refetch();
 	}, [page, debouncedSearch, sort, category, refetch]);
+
+	/* read total pages from API meta */
+	useEffect(() => {
+		if (books?.meta?.totalPages) setTotalPages(books.meta.totalPages);
+	}, [books]);
+
+	/* render */
 	return (
 		<section className='container py-8'>
-			<div className='flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6'>
+			{/* ─── admin only: new-book button ───────────────────────── */}
+			{user && String(user?.role) === 'ADMIN' && (
+				<div className='mb-4 flex justify-end'>
+					<Button onClick={() => router.push('/mg-dashboard/new-book')}>
+						+ New Book
+					</Button>
+				</div>
+			)}
+
+			{/* ─── filters ───────────────────────────────────────────── */}
+			<div className='mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between'>
 				<Input
-					placeholder='Search books...'
+					placeholder='Search books…'
 					value={search}
-					onChange={e => {
-						setSearch(e.target.value);
-						setPage(1);
-					}}
+					onChange={e => setSearch(e.target.value)}
 					className='w-full md:w-1/3'
 				/>
 
-				<div className='flex gap-4 w-full md:w-auto'>
-					<Select value={sort} onValueChange={val => setSort(val)}>
+				<div className='flex w-full gap-4 md:w-auto'>
+					{/* sort */}
+					<Select value={sort} onValueChange={setSort}>
 						<SelectTrigger className='w-[160px]'>
 							<SelectValue placeholder='Sort by' />
 						</SelectTrigger>
@@ -79,40 +102,39 @@ export default function BooksPage() {
 						</SelectContent>
 					</Select>
 
+					{/* category */}
 					<Select
-						value={category}
-						onValueChange={val => {
-							const normalized = val === 'All' ? '' : val; // send '' ⇒ no filter
-							setCategory(normalized);
+						value={category || 'All'}
+						onValueChange={v => {
+							setCategory(v === 'All' ? '' : v);
 							setPage(1);
 						}}
 					>
 						<SelectTrigger className='w-[170px]'>
-							<SelectValue placeholder='Filter by category' />
+							<SelectValue placeholder='Category' />
 						</SelectTrigger>
-
 						<SelectContent>
 							<SelectItem value='All'>All</SelectItem>
-
-							{categoryOptions.map(cat => {
-								const label = cat.charAt(0) + cat.slice(1).toLowerCase(); // "FICTION" → "Fiction"
-								return (
-									<SelectItem key={cat} value={cat}>
-										{label}
-									</SelectItem>
-								);
-							})}
+							{categoryOptions.map(cat => (
+								<SelectItem key={cat} value={cat}>
+									{cat.charAt(0) + cat.slice(1).toLowerCase()}
+								</SelectItem>
+							))}
 						</SelectContent>
 					</Select>
 				</div>
 			</div>
-			{/* Book Grid */}
-			<div className='flex flex-wrap  gap-6'>
-				{books?.data?.map((book: any) => (
-					<BookCard key={book.id} book={book} />
-				))}
+
+			{/* ─── grid ──────────────────────────────────────────────── */}
+			<div className='flex flex-wrap gap-6'>
+				{isLoading
+					? Array.from({ length: limit }).map((_, i) => (
+							<BookCardSkeleton key={i} />
+					  ))
+					: books?.data?.map((b: any) => <BookCard key={b.id} book={b} />)}
 			</div>
-			{/* Pagination */}
+
+			{/* ─── pagination ───────────────────────────────────────── */}
 			<div className='mt-10 flex justify-center'>
 				<Pagination
 					page={page}
