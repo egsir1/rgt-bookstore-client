@@ -16,6 +16,8 @@ export const categoryOptions = [
 	'FANTASY',
 ];
 
+export const BookStatus = ['ACTIVE', 'PAUSED', 'SOLD_OUT'];
+
 /** Difficulty / target-audience levels */
 export const levelOptions = [
 	'BEGINNER',

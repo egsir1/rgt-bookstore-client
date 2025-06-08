@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Book } from '@/types/book';
+import './text-editor.css';
 
 interface Props {
 	book: Book;
@@ -47,9 +48,10 @@ export default function BookDetail({ book }: Props) {
 					</div>
 
 					{/* Description */}
-					<p className='text-sm leading-relaxed text-muted-foreground'>
-						{book.description}
-					</p>
+					<div
+						className='rich-text'
+						dangerouslySetInnerHTML={{ __html: book.description }}
+					/>
 
 					{/* Meta */}
 					<ul className='space-y-1 text-sm'>

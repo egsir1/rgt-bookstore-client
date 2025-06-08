@@ -70,3 +70,40 @@
 .tiptap ol {
 	list-style: decimal;
 }
+
+.rich-text {
+	font-size: 14px;
+	color: #4a4a4a;
+	line-height: 1.6;
+}
+
+.rich-text p {
+	margin-bottom: 1em;
+}
+
+.rich-text em {
+	font-style: italic;
+}
+
+.rich-text strong {
+	font-weight: bold;
+}
+
+.rich-text ul,
+.rich-text ol {
+	margin-left: 1.5em;
+	margin-bottom: 1em;
+}
+
+.rich-text ul li,
+.rich-text ol li {
+	margin-bottom: 0.5em;
+}
+
+.rich-text ul {
+	list-style-type: disc;
+}
+
+.rich-text ol {
+	list-style-type: decimal;
+}

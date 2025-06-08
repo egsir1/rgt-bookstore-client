@@ -25,6 +25,20 @@ export const useAllBooks = (queryData: any) => {
 	});
 };
 
+export const useCreateBook = () => {
+	return useMutation({
+		mutationFn: async (data: any) => {
+			const result = await customAxios({
+				url: '/book/create',
+				method: HttpMethod.POST,
+				data,
+			});
+			console.log('🚀 ~ mutationFn: ~ result:', result);
+			return result;
+		},
+	});
+};
+
 // export const useSingleBook = (bookId: any) => {
 // 	return useQuery({
 // 		queryKey: ['single-book', bookId],
