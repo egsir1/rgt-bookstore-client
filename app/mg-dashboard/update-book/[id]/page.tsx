@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import CreateBookForm from '@/components/admin/create-book-form';
 import { Book } from '@/types/book';
 
-//SSR
+// SSR: Fetch book data
 async function getBook(id: string): Promise<Book | null> {
 	const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/book/${id}`, {
 		cache: 'no-store',
@@ -15,9 +15,10 @@ async function getBook(id: string): Promise<Book | null> {
 export default async function UpdateBookPage({
 	params,
 }: {
-	params: { id: string };
+	params: Promise<{ id: string }>;
 }) {
-	const book = await getBook(params.id);
+	const { id } = await params;
+	const book = await getBook(id);
 	if (!book) return notFound();
 
 	return (

@@ -18,9 +18,10 @@ async function getBook(id: string): Promise<Book | null> {
 export default async function BookDetails({
 	params,
 }: {
-	params: { id: string };
+	params: Promise<{ id: string }>;
 }) {
-	const book = await getBook(params.id);
+	const { id } = await params;
+	const book = await getBook(id);
 	if (!book) return notFound();
 
 	return <BookDetail book={book} />;

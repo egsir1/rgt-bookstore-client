@@ -60,6 +60,20 @@ export const useUpdateBook = () => {
 	});
 };
 
+export const useDeleteBook = () => {
+	return useMutation({
+		mutationFn: async (data: { bookId: number }) => {
+			const result = await customAxios({
+				url: '/book/delete',
+				method: HttpMethod.DELETE,
+				data,
+			});
+			console.log('🚀 ~ mutationFn: ~ result:', result);
+			return result;
+		},
+	});
+};
+
 // export const useSingleBook = (bookId: any) => {
 // 	return useQuery({
 // 		queryKey: ['single-book', bookId],
