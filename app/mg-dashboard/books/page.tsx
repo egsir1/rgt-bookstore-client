@@ -31,7 +31,7 @@ export default function BooksPage() {
 	const [category, setCategory] = useState('');
 
 	const router = useRouter();
-	const limit = 7;
+	const limit = 6;
 
 	/* ───────────── query hook ───────────── */
 	const {
