@@ -1,15 +1,16 @@
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
+import { Book } from '@/types/book';
 
-export function BookCard({ book }: { book: any }) {
+export function BookCard({ book, path }: { book: Book; path: string }) {
 	console.log('🚀 ~ BookCard ~ book:', book);
 	const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 	const router = useRouter();
 	return (
 		<Card
 			className='cursor-pointer  h-[450px] w-[350px]'
-			onClick={() => router.push(`/mg-dashboard/books/${book.id}`)}
+			onClick={() => router.push(`${path}/${book.id}`)}
 		>
 			<CardHeader>
 				<CardTitle className='text-lg line-clamp-1'>{book.title}</CardTitle>

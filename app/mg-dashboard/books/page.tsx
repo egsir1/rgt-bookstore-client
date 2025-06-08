@@ -128,7 +128,9 @@ export default function BooksPage() {
 					? Array.from({ length: limit }).map((_, i) => (
 							<BookCardSkeleton key={i} />
 					  ))
-					: books?.data?.map((b: any) => <BookCard key={b.id} book={b} />)}
+					: books?.data?.map((b: any) => (
+							<BookCard key={b.id} book={b} path='/mg-dashboard/books' />
+					  ))}
 			</div>
 
 			{/* pagination */}

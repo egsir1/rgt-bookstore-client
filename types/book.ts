@@ -15,6 +15,7 @@ export interface Book {
 	thumbnailUrl: string;
 	category: string;
 	print_length: number;
+	owner?: any;
 }
 
 export interface CreateBook {
