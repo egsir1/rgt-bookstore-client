@@ -1,14 +1,15 @@
-import { Header } from '@/components/header';
 import './globals.css';
-
 import type { Metadata } from 'next';
-import { Footer } from '@/components/footer';
+
 import Providers from '@/components/providers';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import AuthProvider from '@/components/auth-provider';
+import { Header } from '@/components/header';
+import { Footer } from '@/components/footer';
 import { Toaster } from 'sonner';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 export const metadata: Metadata = {
-	title: 'BookVerse',
+	title: 'RGT',
 	description: 'Online book marketplace',
 };
 
@@ -21,13 +22,16 @@ export default function RootLayout({
 		<html lang='en'>
 			<body className='bg-background text-foreground font-sans'>
 				<Providers>
-					<ReactQueryDevtools initialIsOpen={false} />
-					<Toaster position='top-center' />
-					<Header />
-					<main className='container mx-auto px-4 py-6 min-h-[calc(100vh-8rem)]'>
-						{children}
-					</main>
-					<Footer />
+					<AuthProvider>
+						<ReactQueryDevtools initialIsOpen={false} />
+						<Toaster position='top-center' />
+
+						<Header />
+						<main className='container mx-auto px-4 py-6 min-h-[calc(100vh-8rem)]'>
+							{children}
+						</main>
+						<Footer />
+					</AuthProvider>
 				</Providers>
 			</body>
 		</html>

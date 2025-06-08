@@ -1,4 +1,5 @@
 import { customAxios, HttpMethod } from '@/lib/custom-axios';
+import { useUserStore } from '@/stores/useUserStore';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
@@ -47,4 +48,32 @@ export const useLogin = () => {
 			return res;
 		},
 	});
+};
+
+export const useMe = () => {
+	const [enabled, setEnabled] = useState(false);
+	console.log('🚀 ~ useMe ~ enabled:', enabled);
+	const setUser = useUserStore(state => state.setUser);
+
+	// useEffect(() => {
+	// 	if (Cookies.get('log') === '1') {
+	// 		setEnabled(true);
+	// 	}
+	// }, []);
+
+	const query = useQuery({
+		// enabled,
+		queryKey: ['me'],
+		queryFn: () => customAxios({ url: '/user/me', method: HttpMethod.GET }),
+		retry: false,
+		staleTime: 5 * 60 * 1000,
+	});
+
+	useEffect(() => {
+		if (query.data) {
+			setUser(query.data);
+		}
+	}, [query.data, setUser]);
+
+	return query;
 };
