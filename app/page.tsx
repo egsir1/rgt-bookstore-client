@@ -29,7 +29,7 @@ export default function BooksPage() {
 	const [debouncedSearch, setDebouncedSearch] = useState('');
 	const [sort, setSort] = useState('newest');
 	const [category, setCategory] = useState('');
-	const limit = 10;
+	const limit = 8;
 
 	const router = useRouter();
 	const { user } = useUserStore();
@@ -63,7 +63,7 @@ export default function BooksPage() {
 
 	/* read total pages from API meta */
 	useEffect(() => {
-		if (books?.meta?.totalPages) setTotalPages(books.meta.totalPages);
+		if (books?.totalPages) setTotalPages(books.totalPages);
 	}, [books]);
 
 	/* render */

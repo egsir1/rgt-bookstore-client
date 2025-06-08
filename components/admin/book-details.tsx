@@ -160,7 +160,7 @@ export default function BookDetail({ book }: Props) {
 					</div>
 				)}
 			</div>
-			<div className='grid grid-cols-2 md:grid-cols-7 sm:grid-cols-4 gap-4 py-4 border border-gray-100 rounded-md'>
+			<div className='grid grid-cols-2 md:grid-cols-7 sm:grid-cols-4 gap-4 py-4 border border-gray-100 rounded-md mt-2'>
 				<div className='flex flex-col items-center'>
 					<Hash className='text-muted-foreground mb-1' size={20} />
 					<p className='text-xs text-gray-500'>Edition</p>

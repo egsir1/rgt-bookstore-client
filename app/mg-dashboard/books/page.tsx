@@ -31,7 +31,7 @@ export default function BooksPage() {
 	const [category, setCategory] = useState('');
 
 	const router = useRouter();
-	const limit = 10;
+	const limit = 7;
 
 	/* ───────────── query hook ───────────── */
 	const {
@@ -45,6 +45,7 @@ export default function BooksPage() {
 		sort,
 		category,
 	});
+	console.log('🚀 ~ BooksPage ~ books:', books);
 
 	/* debounce search text */
 	useEffect(() => {
@@ -62,7 +63,7 @@ export default function BooksPage() {
 
 	/* update total pages from API meta */
 	useEffect(() => {
-		if (books?.meta?.totalPages) setTotalPages(books.meta.totalPages);
+		if (books?.totalPages) setTotalPages(books.totalPages);
 	}, [books]);
 
 	/* ───────────── render ───────────── */
