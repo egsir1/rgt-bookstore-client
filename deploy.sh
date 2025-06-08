@@ -15,7 +15,6 @@ pm2 start node_modules/next/dist/bin/next \
      --name rgt-web \
      --env production \
      -- start -p 8000 \
-     --time
 
 pm2 save
 echo "✅ Web running on :8000  |  pm2 logs rgt-web"
