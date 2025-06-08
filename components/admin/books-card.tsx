@@ -8,7 +8,7 @@ export function BookCard({ book }: { book: any }) {
 	const router = useRouter();
 	return (
 		<Card
-			className='cursor-pointer  h-[450px]'
+			className='cursor-pointer  h-[450px] w-[350px]'
 			onClick={() => router.push(`/mg-dashboard/books/${book.id}`)}
 		>
 			<CardHeader>

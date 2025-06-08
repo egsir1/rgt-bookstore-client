@@ -107,7 +107,7 @@ export default function BooksPage() {
 				</div>
 			</div>
 			{/* Book Grid */}
-			<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
+			<div className='flex flex-wrap  gap-6'>
 				{books?.data?.map((book: any) => (
 					<BookCard key={book.id} book={book} />
 				))}

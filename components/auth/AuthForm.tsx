@@ -55,7 +55,7 @@ export default function AuthForm() {
 				: forgotSchema
 		),
 	});
-
+	const searchParams = useSearchParams();
 	const signup = useSignup();
 	const login = useLogin();
 	const onSubmit = async (data: any) => {
@@ -69,8 +69,17 @@ export default function AuthForm() {
 					router.push('/auth/verify');
 				},
 				onError: (err: any) => {
-					const parsed = JSON.parse(err.message);
-					toast.error(parsed.errorMessage || 'Signup failed');
+					let errorMessage = 'Verification failed';
+					try {
+						const parsed =
+							typeof err.message === 'string' ? JSON.parse(err.message) : err;
+						errorMessage =
+							parsed?.errorMessage || parsed?.message || errorMessage;
+					} catch {
+						errorMessage =
+							err?.response?.data?.errorMessage || err?.message || errorMessage;
+					}
+					toast.error(errorMessage);
 				},
 			});
 			console.log('🚀 ~ onSubmit ~ data:', data);
@@ -78,11 +87,23 @@ export default function AuthForm() {
 			login.mutate(data, {
 				onSuccess: () => {
 					toast.success('Login successful');
-					router.replace('/');
+					const next = searchParams.get('next') || '/';
+
+					router.replace(next);
+					router.refresh();
 				},
 				onError: (err: any) => {
-					const parsed = JSON.parse(err.message);
-					toast.error(parsed.errorMessage || 'Login failed');
+					let errorMessage = 'Verification failed';
+					try {
+						const parsed =
+							typeof err.message === 'string' ? JSON.parse(err.message) : err;
+						errorMessage =
+							parsed?.errorMessage || parsed?.message || errorMessage;
+					} catch {
+						errorMessage =
+							err?.response?.data?.errorMessage || err?.message || errorMessage;
+					}
+					toast.error(errorMessage);
 				},
 			});
 		}
@@ -159,14 +180,16 @@ export default function AuthForm() {
 					disabled={signup.status === 'pending' || login.status === 'pending'}
 				>
 					{(mode === 'signup' && signup.status === 'pending') ||
-						(mode === 'login' && login.status === 'pending' && (
-							<span className='flex items-center justify-center gap-2'>
-								<Spinner />
-								Processing...
-							</span>
-						))}
-					{(mode === 'signup' && signup.status !== 'pending' && 'Sign Up') ||
-						(mode === 'login' && login.status !== 'pending' && 'Login')}
+					(mode === 'login' && login.status === 'pending') ? (
+						<span className='flex items-center justify-center gap-2'>
+							<Spinner />
+							Processing...
+						</span>
+					) : mode === 'signup' ? (
+						'Sign Up'
+					) : (
+						'Login'
+					)}
 				</Button>
 			</form>
 			{mode === 'forgot' && showMessage && (
