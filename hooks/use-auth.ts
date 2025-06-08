@@ -26,7 +26,7 @@ export const useVerify = () => {
 		mutationFn: async (otpcode: string) => {
 			const res = await customAxios({
 				url: '/user/verify-email',
-				method: HttpMethod.POST,
+				method: HttpMethod.PATCH,
 				data: { activationCode: otpcode },
 			});
 			console.log('🚀 ~ mutationFn: ~ res:', res);

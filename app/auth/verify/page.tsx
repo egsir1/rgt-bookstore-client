@@ -48,7 +48,7 @@ export default function VerifyPage() {
 	};
 
 	return (
-		<div className='flex min-h-screen items-center justify-center bg-gray-100 dark:bg-black'>
+		<div className='flex min-h-screen items-center justify-center  dark:bg-black'>
 			<div className='w-full max-w-md space-y-6 rounded-xl bg-white p-8 shadow-xl dark:bg-gray-900'>
 				<h2 className='text-2xl font-bold text-center'>Verify your email</h2>
 				<p className='text-center text-sm text-gray-500'>
