@@ -1,16 +1,27 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+const PUBLIC_ROUTES = ['/auth', '/api', '/_next', '/favicon.ico'];
+
 export function middleware(req: NextRequest) {
 	const { pathname } = req.nextUrl;
-
+	// Allow public routes
+	if (PUBLIC_ROUTES.some(publicPath => pathname.startsWith(publicPath))) {
+		return NextResponse.next();
+	}
 	// Check for access token
 	const token = req.cookies.get('accessToken')?.value;
 	console.log('🚀 ~ middleware ~ token:', token);
 	if (!token) {
-		return NextResponse.redirect(new URL('/auth', req.url));
+		if (pathname === '/') {
+			return NextResponse.redirect(new URL('/auth', req.url));
+		}
 	}
-
+	// const user = token && decodeToken(token);
+	// const userRole = user?.role;
+	// if (userRole === 'ADMIN' && pathname === '/') {
+	// 	return NextResponse.redirect(new URL('/mg-dashboard/books', req.url));
+	// }
 	return NextResponse.next(); // Authenticated
 }
 function decodeToken(token: string) {
