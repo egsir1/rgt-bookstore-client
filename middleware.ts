@@ -57,6 +57,7 @@ export function middleware(req: NextRequest) {
 
 	/*  Get HTTP-only cookie */
 	const token = req.cookies.get('accessToken')?.value;
+	console.log('🚀 ~ middleware ~ token:', token);
 
 	/*Redirect everyone without a token to /auth */
 	if (!token) {
@@ -72,11 +73,6 @@ export function middleware(req: NextRequest) {
 	/*Non-ADMIN hits dashboard → kick to / */
 	if (pathname.startsWith('/mg-dashboard') && userRole !== 'ADMIN') {
 		return NextResponse.redirect(new URL('/', req.url));
-	}
-
-	/* ADMIN hits root “/” → go straight to dashboard */
-	if (pathname === '/' && userRole === 'ADMIN') {
-		return NextResponse.redirect(new URL('/mg-dashboard/books', req.url));
 	}
 
 	return NextResponse.next(); // All good
