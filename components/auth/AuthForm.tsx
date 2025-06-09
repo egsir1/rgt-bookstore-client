@@ -87,7 +87,7 @@ export default function AuthForm() {
 			login.mutate(data, {
 				onSuccess: () => {
 					toast.success('Login successful');
-					router.replace('/');
+					router.push('/');
 				},
 				onError: (err: any) => {
 					let errorMessage = 'Verification failed';

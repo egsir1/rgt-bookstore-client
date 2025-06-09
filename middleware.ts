@@ -6,13 +6,14 @@ const PUBLIC_ROUTES = ['/auth', '/api', '/_next', '/favicon.ico'];
 export function middleware(req: NextRequest) {
 	const { pathname } = req.nextUrl;
 
-	// // Allow public routes
-	// if (PUBLIC_ROUTES.some(publicPath => pathname.startsWith(publicPath))) {
-	// 	return NextResponse.next();
-	// }
+	// Allow public routes
+	if (PUBLIC_ROUTES.some(publicPath => pathname.startsWith(publicPath))) {
+		return NextResponse.next();
+	}
 
 	// Check for access token
 	const token = req.cookies.get('accessToken')?.value;
+	console.log('🚀 ~ middleware ~ token:', token);
 
 	if (!token) {
 		if (pathname === '/') {
