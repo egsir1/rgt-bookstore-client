@@ -4,19 +4,19 @@ import type { NextRequest } from 'next/server';
 const PUBLIC_ROUTES = ['/auth', '/api', '/_next', '/favicon.ico'];
 
 export function middleware(req: NextRequest) {
-	const { pathname } = req.nextUrl;
-	// Allow public routes
-	if (PUBLIC_ROUTES.some(publicPath => pathname.startsWith(publicPath))) {
-		return NextResponse.next();
-	}
-	// Check for access token
-	const token = req.cookies.get('accessToken')?.value;
-	console.log('🚀 ~ middleware ~ token:', token);
-	if (!token) {
-		if (pathname === '/') {
-			return NextResponse.redirect(new URL('/auth', req.url));
-		}
-	}
+	// const { pathname } = req.nextUrl;
+	// // Allow public routes
+	// if (PUBLIC_ROUTES.some(publicPath => pathname.startsWith(publicPath))) {
+	// 	return NextResponse.next();
+	// }
+	// // Check for access token
+	// const token = req.cookies.get('accessToken')?.value;
+	// console.log('🚀 ~ middleware ~ token:', token);
+	// if (!token) {
+	// 	if (pathname === '/') {
+	// 		return NextResponse.redirect(new URL('/auth', req.url));
+	// 	}
+	// }
 	// const user = token && decodeToken(token);
 	// const userRole = user?.role;
 	// if (userRole === 'ADMIN' && pathname === '/') {
